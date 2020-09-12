@@ -5,90 +5,54 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PreorderSystemForCanteen.Models;
+using PreorderSystemForCanteen.Repositories.Interfaces;
 
 namespace PreorderSystemForCanteen.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductController : Controller
     {
-        private static List<Product> products;
+        private readonly IProductRepository productRepository;
 
-        public ProductController()
+        public ProductController(IProductRepository productRepository)
         {
-            products = new List<Product>()
-            {
-                new Product() {ProductId = 1, Name = "Red Borsh", Type = "Entree", Price = 300},
-                new Product() {ProductId = 2, Name = "Chicken pilaf", Type = "Second dish", Price = 600},
-                new Product() {ProductId = 3, Name = "Vegetable salad", Type = "Cold snack", Price = 200},
-                new Product() {ProductId = 4, Name = "Omelet", Type = "Second dish", Price = 500},
-                new Product() {ProductId = 5, Name = "Oatmel", Type = "Breakfaast", Price = 200},
-                new Product() {ProductId = 6, Name = "Compote", Type = "Drink", Price = 90},
-            };
-
+            this.productRepository = productRepository;
         }
 
         [HttpGet]
-        public List<Product> GetAllProducts()
+        public IActionResult GetAllProducts()
         {
-            return products;
+            return Ok(productRepository.GetAllProducts());
         }
 
         [HttpGet("id/{productId}")]
-        public List<Product> GetProductById(int productId)
+        public IActionResult GetProductById(int productId)
         {
-            return products.Where(p => p.ProductId == productId).ToList();
+            return Ok(productRepository.GetProductById(productId));
         }
 
         [HttpGet("{param}/{name}")]
-        public List<Product> GetProductsWithFilter(string param, string value, int price)
+        public IActionResult GetProductsWithFilter(string param, string value, int price)
         {
-            
-            if(param.ToLower().Equals("name"))
-            {
-                return products.Where(p => p.Name.ToLower() == value.ToLower()).ToList();
-            }
-            else if (param.ToLower().Equals("type"))
-            {
-                return products.Where(p => p.Type.ToLower() == value.ToLower()).ToList();
-            }
-            else if(param.Equals(price))
-            {
-                return products.Where(p => p.Price == price).ToList();
-            }
-            return null;
-           
+            return Ok(productRepository.GetProductsWithFilter(param, value, price));
         }
 
         [HttpGet("add/{id}/{name}/{type}/{price}")]
-        public List<Product> AddProduct(int id, string name, string type, int price)
+        public IActionResult AddProduct(int id, string name, string type, int price)
         {
-             products.Add(new Product
-            {
-                ProductId = id,
-                Name = name,
-                Type = type,
-                Price = price
-            });
-
-            return products;
-               
-
-           
+            return Ok(productRepository.AddProduct(id, name, type, price));
         }
 
-      
+
         [HttpGet("remove/{id}")]
-        public List<Product> RemoveProduct(int id)
+        public IActionResult RemoveProduct(int id)
         {
-            products.RemoveAll(p => p.ProductId == id);
-            return products;
+            return Ok(productRepository.RemoveProduct(id));
         }
 
-        public List<Product> UpdateProduct()
+        public IActionResult UpdateProduct()
         {
-
-
             return null;
         }
 
