@@ -32,6 +32,17 @@ namespace PreorderSystemForCanteen.Controllers
             return Ok(productRepository.GetProductById(productId));
         }
 
+        [HttpGet("name/{name}")]
+        public IActionResult GetProductByName(string name)
+        {
+            var product = Ok(productRepository.GetProductByName(name));
+            if (product is null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+
         [HttpGet("{param}/{name}")]
         public IActionResult GetProductsWithFilter(string param, string value, int price)
         {

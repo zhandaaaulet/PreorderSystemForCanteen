@@ -14,5 +14,7 @@ namespace PreorderSystemForCanteen.Repositories.Interfaces
         List<Product> AddProduct(int id, string name, string type, int price);
         List<Product> RemoveProduct(int id);
         List<Product> UpdateProduct();
+
+        Product GetProductByName(string name);
     }
 }

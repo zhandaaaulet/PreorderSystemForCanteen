@@ -36,6 +36,12 @@ namespace PreorderSystemForCanteen.Repositories.Implementations
             return products.Where(p => p.ProductId == productId).ToList();
         }
 
+        public Product GetProductByName(string name)
+        {
+            
+            return products.FirstOrDefault(product => product.Name == name);
+        }
+
         public List<Product> GetProductsWithFilter(string param, string value, int price)
         {
 
